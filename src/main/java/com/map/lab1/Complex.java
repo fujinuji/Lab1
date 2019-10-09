@@ -34,16 +34,18 @@ public class Complex {
     }
 
     public Complex multiply(Complex number) {
+        double oldReal = this.real;
         this.real = this.real * number.getReal() - this.imaginary * number.getImaginary();
-        this.imaginary = this.real * number.getImaginary() + this.imaginary * number.getReal();
+        this.imaginary = oldReal * number.getImaginary() + this.imaginary * number.getReal();
 
         return this;
     }
 
     public Complex division(Complex number) {
+        double oldReal = this.real;
         this.real = (this.real * number.getReal() + this.imaginary * number.getImaginary()) /
                 (Math.pow(number.getReal(), 2) + Math.pow(number.getImaginary(), 2));
-        this.imaginary = (this.imaginary * number.getReal() - this.real * number.getImaginary()) /
+        this.imaginary = (this.imaginary * number.getReal() - oldReal * number.getImaginary()) /
                 (Math.pow(number.getReal(), 2) + Math.pow(number.getImaginary(), 2));
 
         return this;

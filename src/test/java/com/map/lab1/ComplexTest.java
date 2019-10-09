@@ -24,7 +24,7 @@ public class ComplexTest {
 
     @Test(expected = RuntimeException.class)
     public void testNotSameOperatorShouldThrowException() {
-        expressionParser.parseExpression(new String[]{"1*i", "+", "2", "-", "2"});
+        expressionParser.parseExpression(new String[]{"1*i", "+", "1+2*i", "-", "2"});
     }
 
     @Test(expected = RuntimeException.class)

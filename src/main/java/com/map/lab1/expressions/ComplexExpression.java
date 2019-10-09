@@ -40,5 +40,4 @@ public abstract class ComplexExpression {
 
         return complexExpresssion.substring(0, complexExpresssion.length() - 1);
     }
-
 }
