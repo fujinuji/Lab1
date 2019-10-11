@@ -5,8 +5,14 @@ import com.map.lab1.operations.Operation;
 
 public class ExpressionFactory {
 
-    public ExpressionFactory getInstance() {
-        return this.getInstance();
+    private static ExpressionFactory expressionFactory;
+
+    public static ExpressionFactory getInstance() {
+        if(expressionFactory == null) {
+            expressionFactory = new ExpressionFactory();
+        }
+
+        return expressionFactory;
     }
 
     public ComplexExpression createExpression(Operation operation, Complex[] complexes) {

@@ -19,7 +19,7 @@ public class ComplexTest {
     }
     @Test(expected = RuntimeException.class)
     public void testInvalidExpressionShouldThrowException() {
-        expressionParser.parseExpression(new String[]{"25", "+", "+"});
+        expressionParser.parseExpression(new String[]{"25", "+", "25", "+"});
     }
 
     @Test(expected = RuntimeException.class)

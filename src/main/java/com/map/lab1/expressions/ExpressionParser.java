@@ -10,18 +10,25 @@ import java.util.List;
 
 
 public class ExpressionParser {
-    private ExpressionFactory expressionFactory = new ExpressionFactory();
+    private ExpressionFactory expressionFactory = ExpressionFactory.getInstance();
 
     public ComplexExpression parseExpression(String[] expressionString) {
-        if(!isValid(expressionString)) {
+        if (!isValid(expressionString)) {
             throw new RuntimeException("Invalid expression");
         }
 
-        return expressionFactory.createExpression(Operation.value(expressionString[1]), buildArgs(expressionString));
+        if (expressionString.length > 1) {
+            return expressionFactory.createExpression(Operation.value(expressionString[1]), buildArgs(expressionString));
+        }
+
+        return expressionFactory.createExpression(Operation.ADD, buildArgs(expressionString));
     }
 
     public boolean isValid(String[] complexExpression) {
 
+        if (complexExpression.length / 2 != 0) {
+            return false;
+        }
         //Check if operators are valid
         for (int index = 1; index < complexExpression.length; index += 2) {
             if (!complexExpression[index].matches(Constants.OPERATOR_REGEX)) {
@@ -52,10 +59,21 @@ public class ExpressionParser {
     private Complex[] buildArgs(String[] complexExpression) {
         List<Complex> complexList = new ArrayList<>();
 
-        for(int index = 0; index < complexExpression.length; index += 2) {
+        for (int index = 0; index < complexExpression.length; index += 2) {
             boolean sign = false;
+            boolean signReal = false;
 
-            if(complexExpression[index].contains("-")) {
+            if ('-' == complexExpression[index].charAt(0)) {
+                if(complexExpression[index].matches(Constants.COMPLEX_NUMBER_IMAGINARY_REGEX)) {
+                    sign = true;
+                } else {
+                    signReal = true;
+                }
+
+                complexExpression[index] = complexExpression[index].substring(complexExpression[index].indexOf('-') + 1);
+            }
+
+            if (complexExpression[index].contains("-")) {
                 sign = true;
             }
 
@@ -65,9 +83,13 @@ public class ExpressionParser {
 
             for (String number : complexNumberParts) {
                 if (number.contains("i")) {
-                    imaginary = (sign ? "-" : "+") + number.replace("*i", "");
+                    if (number.equals("i")) {
+                        imaginary = (sign ? "-" : "+") + "1";
+                    } else  {
+                        imaginary = (sign ? "-" : "+") + number.replace("*i", "");
+                    }
                 } else {
-                    real = number;
+                    real = (signReal ? "-" : "+") + number;
                 }
             }
 
